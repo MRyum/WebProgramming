@@ -1,0 +1,2 @@
+http://demun.tistory.com/2433 <- git의 명령어 모음
+https://rogerdudler.github.io/git-guide/index.ko.html <- git의 초심자 설명 url

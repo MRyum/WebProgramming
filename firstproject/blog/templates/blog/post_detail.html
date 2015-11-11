@@ -1,0 +1,41 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="post">
+	{% if post.published_date %}
+	{{ post.published_date }}
+	{% else %}
+	<a class="btn btn-default" href="{% url "blog.views.post_publish" post_id=post.pk %}">Publish</a>
+	{% endif %}
+	<a class="btn btn-default" href="{% url "post_edit" post_id=post.pk %}">
+		<span class="glyphicon glyphicon-pencil"></span>
+	</a>
+	<a class="btn btn-default" href="{% url "post_remove" post_id=post.pk %}">
+		<span class="glyphicon glyphicon-remove"></span>
+	</a>
+	<h1>{{ post.title }}</h1>
+	<p>{{ post.text }}</p>
+</div>
+<hr />
+<a class="btn btn-default" href="{% url 'add_comment_to_post' post_id=post.pk %}">댓글 달기</a>
+	{% for comment in post.comments.all %}
+		{% if user.is_authenticated or comment.approved_comment %}
+		<div class="comment">
+			<div class="date">
+				{{ comment.created_date }}
+			</div>
+			<strong>{{ comment.author }}</strong>
+			<p>{{ comment.text | linebreaks }}</p>
+		</div>
+		{% if not comment.approved_comment %}
+			<a class="btn btn-default" href="{% url "comment_approve" post_id=comment.pk %}">
+				<span class="glyphicon glyphicon-ok"></span>
+			</a>
+		{% endif %}
+		{% endif %}
+		<a class="btn btn-default" href="{% url "comment_remove" post_id=comment.pk %}">
+			<span class="glyphicon glyphicon-remove" ></span>
+		</a>
+		{% empty %}
+			<p id="empty">첫 번째 댓글을 적어주세요!</p>
+	{% endfor %}
+{% endblock content %}
